@@ -13,6 +13,7 @@ import (
 func (al *ActLogic) addActivityHandler(w http.ResponseWriter, r *http.Request) {
 	req := &AddActivityReq{}
 	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+		logrus.Errorf("json decode error: %v", err)
 		return
 	}
 
@@ -104,6 +105,7 @@ func (al *ActLogic) addActivityHeaderHandler(w http.ResponseWriter, r *http.Requ
 func (al *ActLogic) addActivityItemsHandler(w http.ResponseWriter, r *http.Request) {
 	req := &AddActivityItemsReq{}
 	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+		logrus.Errorf("json decode error: %v", err)
 		return
 	}
 
@@ -132,6 +134,7 @@ func (al *ActLogic) addActivityItemsHandler(w http.ResponseWriter, r *http.Reque
 func (al *ActLogic) getActivityHeaderHandler(w http.ResponseWriter, r *http.Request) {
 	req := &GetActivityHeaderReq{}
 	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+		logrus.Errorf("json decode error: %v", err)
 		return
 	}
 
@@ -179,6 +182,7 @@ func (al *ActLogic) getActivityHeaderHandler(w http.ResponseWriter, r *http.Requ
 func (al *ActLogic) getActivityItemsHandler(w http.ResponseWriter, r *http.Request) {
 	req := &GetActivityItemsReq{}
 	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+		logrus.Errorf("json decode error: %v", err)
 		return
 	}
 
