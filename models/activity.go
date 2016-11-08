@@ -27,3 +27,13 @@ func CreateActivity(info *Activity) error {
 	
 	return nil
 }
+
+func GetActivityList() ([]Activity, error) {
+	var activityList []Activity
+	err := x.Find(&activityList)
+	if err != nil {
+		logrus.Errorf("get activity list error: %v", err)
+		return nil, err
+	}
+	return activityList, nil
+}

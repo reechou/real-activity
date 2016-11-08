@@ -30,6 +30,7 @@ func (al *ActLogic) init() {
 	http.HandleFunc("/act/add_activity_items", al.addActivityItemsHandler)
 	http.HandleFunc("/act/get_activity_header", al.getActivityHeaderHandler)
 	http.HandleFunc("/act/get_activity_items", al.getActivityItemsHandler)
+	http.HandleFunc("/act/get_activitys", al.getActivityListHandler)
 }
 
 func (al *ActLogic) Run() {
