@@ -23,9 +23,9 @@ func CreateActivityItemsList(list []ActivityItem) error {
 	return nil
 }
 
-func GetActivityItemList(navigationId int64) ([]ActivityItem, error) {
+func GetActivityItemList(navigationId int64, offset, num int64) ([]ActivityItem, error) {
 	var itemList []ActivityItem
-	err := x.Where("navigation_id = ?", navigationId).Find(&itemList)
+	err := x.Where("navigation_id = ?", navigationId).Limit(int(num), int(offset)).Find(&itemList)
 	if err != nil {
 		logrus.Errorf("navigation_id[%d] get activity item list error: %v", navigationId, err)
 		return nil, err

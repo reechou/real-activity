@@ -93,9 +93,9 @@ func (al *ActLogic) addActivityHeaderHandler(w http.ResponseWriter, r *http.Requ
 			var bInfo []ActivityBannerInfo
 			for _, v := range bannerList {
 				abi := ActivityBannerInfo{
-					BannerImgUrl: v.ImgUrl,
+					BannerImgUrl:  v.ImgUrl,
 					BannerLinkUrl: v.LinkUrl,
-					BannerId: v.ID,
+					BannerId:      v.ID,
 				}
 				bInfo = append(bInfo, abi)
 			}
@@ -148,9 +148,9 @@ func (al *ActLogic) getActivityListHandler(w http.ResponseWriter, r *http.Reques
 		WriteJSON(w, http.StatusOK, nil)
 		return
 	}
-	
+
 	rsp := &ActivityResponse{Code: RESPONSE_OK}
-	
+
 	list, err := models.GetActivityList()
 	if err != nil {
 		logrus.Errorf("Error get activity list error: %v", err)
@@ -159,7 +159,7 @@ func (al *ActLogic) getActivityListHandler(w http.ResponseWriter, r *http.Reques
 	} else {
 		rsp.Data = list
 	}
-	
+
 	WriteJSON(w, http.StatusOK, rsp)
 }
 
@@ -199,9 +199,9 @@ func (al *ActLogic) getActivityHeaderHandler(w http.ResponseWriter, r *http.Requ
 			var bannerList []ActivityBannerInfo
 			for _, v := range bList {
 				abi := ActivityBannerInfo{
-					BannerImgUrl: v.ImgUrl,
+					BannerImgUrl:  v.ImgUrl,
 					BannerLinkUrl: v.LinkUrl,
-					BannerId:   v.ID,
+					BannerId:      v.ID,
 				}
 				bannerList = append(bannerList, abi)
 			}
@@ -228,7 +228,7 @@ func (al *ActLogic) getActivityItemsHandler(w http.ResponseWriter, r *http.Reque
 
 	rsp := &ActivityResponse{Code: RESPONSE_OK}
 
-	list, err := models.GetActivityItemList(req.NavigationId)
+	list, err := models.GetActivityItemList(req.NavigationId, req.Offset, req.Num)
 	if err != nil {
 		logrus.Errorf("Error get activity items error: %v", err)
 		rsp.Code = RESPONSE_ERR

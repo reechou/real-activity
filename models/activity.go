@@ -24,7 +24,7 @@ func CreateActivity(info *Activity) error {
 		return err
 	}
 	logrus.Infof("create activity[%s] success.", info.Title)
-	
+
 	return nil
 }
 

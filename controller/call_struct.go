@@ -26,6 +26,8 @@ type GetActivityHeaderReq struct {
 
 type GetActivityItemsReq struct {
 	NavigationId int64 `json:"navigationId"`
+	Offset       int64 `json:"offset"`
+	Num          int64 `json:"num"`
 }
 
 type ActivityNavigationInfo struct {
