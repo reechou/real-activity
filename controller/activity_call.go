@@ -176,38 +176,49 @@ func (al *ActLogic) getActivityHeaderHandler(w http.ResponseWriter, r *http.Requ
 
 	rsp := &ActivityResponse{Code: RESPONSE_OK}
 
-	nList, err := models.GetActivityNavigationList(req.ActivityId)
-	if err != nil {
-		logrus.Errorf("Error get activity navigation list error: %v", err)
+	aInfo := &models.Activity{
+		ID: req.ActivityId,
+	}
+	has, err := models.GetActivityInfo(aInfo)
+	if err != nil || !has {
+		logrus.Errorf("Error get activity info error: %v or not found", err)
 		rsp.Code = RESPONSE_ERR
-		rsp.Msg = fmt.Sprintf("Error get activity navigation list error: %v", err)
+		rsp.Msg = fmt.Sprintf("Error get activity info error: %v", err)
 	} else {
-		bList, err := models.GetActivityBannerList(req.ActivityId)
+		nList, err := models.GetActivityNavigationList(req.ActivityId)
 		if err != nil {
-			logrus.Errorf("Error get activity banner list error: %v", err)
+			logrus.Errorf("Error get activity navigation list error: %v", err)
 			rsp.Code = RESPONSE_ERR
-			rsp.Msg = fmt.Sprintf("Error get activity banner list error: %v", err)
+			rsp.Msg = fmt.Sprintf("Error get activity navigation list error: %v", err)
 		} else {
-			var aviList []ActivityNavigationInfo
-			for _, v := range nList {
-				avi := ActivityNavigationInfo{
-					NavigationName: v.Navigation,
-					NavigationId:   v.ID,
+			bList, err := models.GetActivityBannerList(req.ActivityId)
+			if err != nil {
+				logrus.Errorf("Error get activity banner list error: %v", err)
+				rsp.Code = RESPONSE_ERR
+				rsp.Msg = fmt.Sprintf("Error get activity banner list error: %v", err)
+			} else {
+				var aviList []ActivityNavigationInfo
+				for _, v := range nList {
+					avi := ActivityNavigationInfo{
+						NavigationName: v.Navigation,
+						NavigationId:   v.ID,
+					}
+					aviList = append(aviList, avi)
 				}
-				aviList = append(aviList, avi)
-			}
-			var bannerList []ActivityBannerInfo
-			for _, v := range bList {
-				abi := ActivityBannerInfo{
-					BannerImgUrl:  v.ImgUrl,
-					BannerLinkUrl: v.LinkUrl,
-					BannerId:      v.ID,
+				var bannerList []ActivityBannerInfo
+				for _, v := range bList {
+					abi := ActivityBannerInfo{
+						BannerImgUrl:  v.ImgUrl,
+						BannerLinkUrl: v.LinkUrl,
+						BannerId:      v.ID,
+					}
+					bannerList = append(bannerList, abi)
 				}
-				bannerList = append(bannerList, abi)
-			}
-			rsp.Data = &ActivityHeader{
-				Navigation: aviList,
-				Banner:     bannerList,
+				rsp.Data = &ActivityHeader{
+					Title:      aInfo.Title,
+					Navigation: aviList,
+					Banner:     bannerList,
+				}
 			}
 		}
 	}
@@ -228,17 +239,30 @@ func (al *ActLogic) getActivityItemsHandler(w http.ResponseWriter, r *http.Reque
 
 	rsp := &ActivityResponse{Code: RESPONSE_OK}
 
-	list, err := models.GetActivityItemList(req.NavigationId, req.Offset, req.Num)
+	count, err := models.GetActivityItemCount(req.NavigationId)
 	if err != nil {
-		logrus.Errorf("Error get activity items error: %v", err)
+		logrus.Errorf("Error get activity items count error: %v", err)
 		rsp.Code = RESPONSE_ERR
-		rsp.Msg = fmt.Sprintf("Error get activity items error: %v", err)
+		rsp.Msg = fmt.Sprintf("Error get activity items count error: %v", err)
 	} else {
-		var itemList []string
-		for _, v := range list {
-			itemList = append(itemList, v.Item)
+		list, err := models.GetActivityItemList(req.NavigationId, req.Offset, req.Num)
+		if err != nil {
+			logrus.Errorf("Error get activity items error: %v", err)
+			rsp.Code = RESPONSE_ERR
+			rsp.Msg = fmt.Sprintf("Error get activity items error: %v", err)
+		} else {
+			type ItemList struct {
+				Count int64
+				List  []string
+			}
+			l := &ItemList{
+				Count: count,
+			}
+			for _, v := range list {
+				l.List = append(l.List, v.Item)
+			}
+			rsp.Data = l
 		}
-		rsp.Data = itemList
 	}
 
 	WriteJSON(w, http.StatusOK, rsp)

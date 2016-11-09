@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Sirupsen/logrus"
+	"fmt"
 )
 
 type Activity struct {
@@ -26,6 +27,19 @@ func CreateActivity(info *Activity) error {
 	logrus.Infof("create activity[%s] success.", info.Title)
 
 	return nil
+}
+
+func GetActivityInfo(info *Activity) (bool, error) {
+	has, err := x.Where("id = ?", info.ID).Get(info)
+	if err != nil {
+		logrus.Errorf("get activity id[%d] error: %v", info.ID, err)
+		return false, fmt.Errorf("get activity id[%d] error: %v", info.ID, err)
+	}
+	if !has {
+		logrus.Errorf("get activity id[%d] has no this order.", info.ID)
+		return false, nil
+	}
+	return true, nil
 }
 
 func GetActivityList() ([]Activity, error) {

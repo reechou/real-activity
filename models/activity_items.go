@@ -23,6 +23,15 @@ func CreateActivityItemsList(list []ActivityItem) error {
 	return nil
 }
 
+func GetActivityItemCount(navigationId int64) (int64, error) {
+	count, err := x.Where("navigation_id = ?", navigationId).Count(&ActivityItem{})
+	if err != nil {
+		logrus.Errorf("navigation_id[%d] get item list count error: %v", navigationId, err)
+		return 0, err
+	}
+	return count, nil
+}
+
 func GetActivityItemList(navigationId int64, offset, num int64) ([]ActivityItem, error) {
 	var itemList []ActivityItem
 	err := x.Where("navigation_id = ?", navigationId).Limit(int(num), int(offset)).Find(&itemList)

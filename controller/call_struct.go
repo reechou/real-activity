@@ -42,6 +42,7 @@ type ActivityBannerInfo struct {
 }
 
 type ActivityHeader struct {
+	Title      string                   `json:"title"`
 	Navigation []ActivityNavigationInfo `json:"navigation"`
 	Banner     []ActivityBannerInfo     `json:"banner"`
 }
