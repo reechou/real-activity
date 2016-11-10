@@ -8,6 +8,7 @@ type ActivityNavigation struct {
 	ID         int64  `xorm:"pk autoincr"`
 	ActivityID int64  `xorm:"not null default 0 int index"`
 	Navigation string `xorm:"not null default '' varchar(64)"`
+	Weight     int64  `xorm:"not null default 0 int index"`
 	CreatedAt  int64  `xorm:"not null default 0 int"`
 }
 
@@ -27,7 +28,7 @@ func CreateActivityNavigationList(list []ActivityNavigation) error {
 
 func GetActivityNavigationList(activityId int64) ([]ActivityNavigation, error) {
 	var navigationList []ActivityNavigation
-	err := x.Where("activity_id = ?", activityId).Find(&navigationList)
+	err := x.Where("activity_id = ?", activityId).Desc("weight").Find(&navigationList)
 	if err != nil {
 		logrus.Errorf("activity_id[%d] get activity navigation list error: %v", activityId, err)
 		return nil, err
