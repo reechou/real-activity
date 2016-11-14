@@ -31,11 +31,13 @@ func (al *ActLogic) init() {
 	http.HandleFunc("/act/get_activity_header", al.getActivityHeaderHandler)
 	http.HandleFunc("/act/get_activity_items", al.getActivityItemsHandler)
 	http.HandleFunc("/act/get_activitys", al.getActivityListHandler)
+	http.HandleFunc("/act/del_activity", al.delActivityHandler)
 	http.HandleFunc("/act/del_item", al.delActivityItemHandler)
 	http.HandleFunc("/act/del_navigation", al.delActivityNavigationHandler)
 	http.HandleFunc("/act/del_banner", al.delActivityBannerHandler)
 	http.HandleFunc("/act/update_navigation", al.updateActivityNavigationHandler)
 	http.HandleFunc("/act/update_banner", al.updateActivityBannerHandler)
+	http.HandleFunc("/act/update_activity", al.updateActivityHandler)
 }
 
 func (al *ActLogic) Run() {

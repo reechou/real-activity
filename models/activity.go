@@ -51,3 +51,22 @@ func GetActivityList() ([]Activity, error) {
 	}
 	return activityList, nil
 }
+
+func DelActivity(aId int64) error {
+	a := &Activity{ID: aId}
+	_, err := x.Where("id = ?", aId).Delete(a)
+	if err != nil {
+		logrus.Errorf("id[%d] activity delete error: %v", aId, err)
+		return err
+	}
+	return nil
+}
+
+func UpdateActivity(info *Activity) error {
+	_, err := x.Cols("title").Update(info, &Activity{ID: info.ID})
+	if err != nil {
+		logrus.Errorf("activity[%v] activity update error: %v", info, err)
+		return err
+	}
+	return nil
+}

@@ -266,6 +266,29 @@ func (al *ActLogic) getActivityItemsHandler(w http.ResponseWriter, r *http.Reque
 	WriteJSON(w, http.StatusOK, rsp)
 }
 
+func (al *ActLogic) delActivityHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		WriteJSON(w, http.StatusOK, nil)
+		return
+	}
+	req := &DelActivityReq{}
+	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+		logrus.Errorf("delActivityHandler json decode error: %v", err)
+		return
+	}
+
+	rsp := &ActivityResponse{Code: RESPONSE_OK}
+
+	err := models.DelActivity(req.ActivityId)
+	if err != nil {
+		logrus.Errorf("Error del activity error: %v", err)
+		rsp.Code = RESPONSE_ERR
+		rsp.Msg = fmt.Sprintf("Error del activity error: %v", err)
+	}
+
+	WriteJSON(w, http.StatusOK, rsp)
+}
+
 func (al *ActLogic) delActivityItemHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		WriteJSON(w, http.StatusOK, nil)
@@ -386,6 +409,33 @@ func (al *ActLogic) updateActivityBannerHandler(w http.ResponseWriter, r *http.R
 		logrus.Errorf("Error update activity banner error: %v", err)
 		rsp.Code = RESPONSE_ERR
 		rsp.Msg = fmt.Sprintf("Error update activity banner error: %v", err)
+	}
+
+	WriteJSON(w, http.StatusOK, rsp)
+}
+
+func (al *ActLogic) updateActivityHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		WriteJSON(w, http.StatusOK, nil)
+		return
+	}
+	req := &UpdateActivityReq{}
+	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+		logrus.Errorf("updateActivityHandler json decode error: %v", err)
+		return
+	}
+
+	rsp := &ActivityResponse{Code: RESPONSE_OK}
+
+	info := &models.Activity{
+		ID:    req.ActivityId,
+		Title: req.Title,
+	}
+	err := models.UpdateActivity(info)
+	if err != nil {
+		logrus.Errorf("Error update activity error: %v", err)
+		rsp.Code = RESPONSE_ERR
+		rsp.Msg = fmt.Sprintf("Error update activity error: %v", err)
 	}
 
 	WriteJSON(w, http.StatusOK, rsp)

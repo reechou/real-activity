@@ -47,6 +47,10 @@ type ActivityHeader struct {
 	Banner     []ActivityBannerInfo     `json:"banner"`
 }
 
+type DelActivityReq struct {
+	ActivityId int64 `json:"activityId"`
+}
+
 type DelActivityItemReq struct {
 	ItemId int64 `json:"itemId"`
 }
@@ -57,6 +61,11 @@ type DelNavigationReq struct {
 
 type DelBannerReq struct {
 	BannerId int64 `json:"bannerId"`
+}
+
+type UpdateActivityReq struct {
+	ActivityId int64  `json:"activityId"`
+	Title      string `json:"title"`
 }
 
 type UpdateNavigationReq struct {
