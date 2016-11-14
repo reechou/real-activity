@@ -45,3 +45,12 @@ func DelActivityBanner(abId int64) error {
 	}
 	return nil
 }
+
+func UpdateActivityBanner(info *ActivityBanner) error {
+	_, err := x.Cols("img_url", "link_url").Update(info, &ActivityBanner{ID: info.ID})
+	if err != nil {
+		logrus.Errorf("banner[%v] banner update error: %v", info, err)
+		return err
+	}
+	return nil
+}

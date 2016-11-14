@@ -253,16 +253,139 @@ func (al *ActLogic) getActivityItemsHandler(w http.ResponseWriter, r *http.Reque
 		} else {
 			type ItemList struct {
 				Count int64
-				List  []string
+				List  []models.ActivityItem
 			}
 			l := &ItemList{
 				Count: count,
-			}
-			for _, v := range list {
-				l.List = append(l.List, v.Item)
+				List:  list,
 			}
 			rsp.Data = l
 		}
+	}
+
+	WriteJSON(w, http.StatusOK, rsp)
+}
+
+func (al *ActLogic) delActivityItemHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		WriteJSON(w, http.StatusOK, nil)
+		return
+	}
+	req := &DelActivityItemReq{}
+	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+		logrus.Errorf("delActivityItemHandler json decode error: %v", err)
+		return
+	}
+
+	rsp := &ActivityResponse{Code: RESPONSE_OK}
+
+	err := models.DelActivityItem(req.ItemId)
+	if err != nil {
+		logrus.Errorf("Error del activity item error: %v", err)
+		rsp.Code = RESPONSE_ERR
+		rsp.Msg = fmt.Sprintf("Error del activity item error: %v", err)
+	}
+
+	WriteJSON(w, http.StatusOK, rsp)
+}
+
+func (al *ActLogic) delActivityNavigationHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		WriteJSON(w, http.StatusOK, nil)
+		return
+	}
+	req := &DelNavigationReq{}
+	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+		logrus.Errorf("delActivityNavigationHandler json decode error: %v", err)
+		return
+	}
+
+	rsp := &ActivityResponse{Code: RESPONSE_OK}
+
+	err := models.DelActivityNavigation(req.NavigationId)
+	if err != nil {
+		logrus.Errorf("Error del activity navigation error: %v", err)
+		rsp.Code = RESPONSE_ERR
+		rsp.Msg = fmt.Sprintf("Error del activity navigation error: %v", err)
+	}
+
+	WriteJSON(w, http.StatusOK, rsp)
+}
+
+func (al *ActLogic) delActivityBannerHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		WriteJSON(w, http.StatusOK, nil)
+		return
+	}
+	req := &DelBannerReq{}
+	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+		logrus.Errorf("delActivityBannerHandler json decode error: %v", err)
+		return
+	}
+
+	rsp := &ActivityResponse{Code: RESPONSE_OK}
+
+	err := models.DelActivityBanner(req.BannerId)
+	if err != nil {
+		logrus.Errorf("Error del activity banner error: %v", err)
+		rsp.Code = RESPONSE_ERR
+		rsp.Msg = fmt.Sprintf("Error del activity banner error: %v", err)
+	}
+
+	WriteJSON(w, http.StatusOK, rsp)
+}
+
+func (al *ActLogic) updateActivityNavigationHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		WriteJSON(w, http.StatusOK, nil)
+		return
+	}
+	req := &UpdateNavigationReq{}
+	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+		logrus.Errorf("updateActivityNavigationHandler json decode error: %v", err)
+		return
+	}
+
+	rsp := &ActivityResponse{Code: RESPONSE_OK}
+
+	info := &models.ActivityNavigation{
+		ID:         req.NavigationId,
+		Navigation: req.Navigation,
+		Weight:     req.Weight,
+	}
+	err := models.UpdateActivityNavigation(info)
+	if err != nil {
+		logrus.Errorf("Error update activity navigation error: %v", err)
+		rsp.Code = RESPONSE_ERR
+		rsp.Msg = fmt.Sprintf("Error update activity navigation error: %v", err)
+	}
+
+	WriteJSON(w, http.StatusOK, rsp)
+}
+
+func (al *ActLogic) updateActivityBannerHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		WriteJSON(w, http.StatusOK, nil)
+		return
+	}
+	req := &UpdateBannerReq{}
+	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+		logrus.Errorf("updateActivityBannerHandler json decode error: %v", err)
+		return
+	}
+
+	rsp := &ActivityResponse{Code: RESPONSE_OK}
+
+	info := &models.ActivityBanner{
+		ID:      req.BannerId,
+		ImgUrl:  req.ImgUrl,
+		LinkUrl: req.LinkUrl,
+	}
+	err := models.UpdateActivityBanner(info)
+	if err != nil {
+		logrus.Errorf("Error update activity banner error: %v", err)
+		rsp.Code = RESPONSE_ERR
+		rsp.Msg = fmt.Sprintf("Error update activity banner error: %v", err)
 	}
 
 	WriteJSON(w, http.StatusOK, rsp)

@@ -47,6 +47,30 @@ type ActivityHeader struct {
 	Banner     []ActivityBannerInfo     `json:"banner"`
 }
 
+type DelActivityItemReq struct {
+	ItemId int64 `json:"itemId"`
+}
+
+type DelNavigationReq struct {
+	NavigationId int64 `json:"navigationId"`
+}
+
+type DelBannerReq struct {
+	BannerId int64 `json:"bannerId"`
+}
+
+type UpdateNavigationReq struct {
+	NavigationId int64  `json:"navigationId"`
+	Navigation   string `json:"navigation"`
+	Weight       int64  `json:"weight"`
+}
+
+type UpdateBannerReq struct {
+	BannerId int64  `json:"bannerId"`
+	ImgUrl   string `json:"imgUrl"`
+	LinkUrl  string `json:"linkUrl"`
+}
+
 type ActivityResponse struct {
 	Code int         `json:"code"`
 	Msg  string      `json:"msg,omitempty"`

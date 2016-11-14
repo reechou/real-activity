@@ -41,3 +41,13 @@ func GetActivityItemList(navigationId int64, offset, num int64) ([]ActivityItem,
 	}
 	return itemList, nil
 }
+
+func DelActivityItem(itemId int64) error {
+	item := &ActivityItem{ID: itemId}
+	_, err := x.Where("id = ?", itemId).Delete(item)
+	if err != nil {
+		logrus.Errorf("id[%d] item delete error: %v", itemId, err)
+		return err
+	}
+	return nil
+}

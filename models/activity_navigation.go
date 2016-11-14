@@ -45,3 +45,12 @@ func DelActivityNavigation(anId int64) error {
 	}
 	return nil
 }
+
+func UpdateActivityNavigation(info *ActivityNavigation) error {
+	_, err := x.Cols("navigation", "weight").Update(info, &ActivityNavigation{ID: info.ID})
+	if err != nil {
+		logrus.Errorf("navigation[%v] navigation update error: %v", info, err)
+		return err
+	}
+	return nil
+}
