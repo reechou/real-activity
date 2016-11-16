@@ -53,9 +53,12 @@ func (al *ActLogic) addActivityHeaderHandler(w http.ResponseWriter, r *http.Requ
 	now := time.Now().Unix()
 	var navigationList []models.ActivityNavigation
 	for _, v := range req.Navigation {
+		logrus.Debugf("add navigation: %v", v)
 		n := models.ActivityNavigation{
 			ActivityID: req.ActivityId,
-			Navigation: v,
+			Navigation: v.NavigationName,
+			Weight:     v.NavigationWeight,
+			StartTime:  v.NavigationStartTime,
 			CreatedAt:  now,
 		}
 		navigationList = append(navigationList, n)
@@ -200,8 +203,10 @@ func (al *ActLogic) getActivityHeaderHandler(w http.ResponseWriter, r *http.Requ
 				var aviList []ActivityNavigationInfo
 				for _, v := range nList {
 					avi := ActivityNavigationInfo{
-						NavigationName: v.Navigation,
-						NavigationId:   v.ID,
+						NavigationName:      v.Navigation,
+						NavigationId:        v.ID,
+						NavigationWeight:    v.Weight,
+						NavigationStartTime: v.StartTime,
 					}
 					aviList = append(aviList, avi)
 				}

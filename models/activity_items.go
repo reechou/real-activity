@@ -7,6 +7,7 @@ import (
 type ActivityItem struct {
 	ID           int64  `xorm:"pk autoincr"`
 	NavigationId int64  `xorm:"not null default 0 int index"`
+	TaobaoPid    string `xorm:"not null default '' varchar(128) index"`
 	Item         string `xorm:"not null default '' varchar(2048)"`
 	CreatedAt    int64  `xorm:"not null default 0 int"`
 }

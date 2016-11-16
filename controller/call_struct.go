@@ -10,9 +10,9 @@ type AddActivityReq struct {
 }
 
 type AddActivityHeaderReq struct {
-	ActivityId int64                `json:"activityId"`
-	Navigation []string             `json:"navigation"`
-	Banner     []ActivityBannerInfo `json:"banner"`
+	ActivityId int64                    `json:"activityId"`
+	Navigation []ActivityNavigationInfo `json:"navigation"`
+	Banner     []ActivityBannerInfo     `json:"banner"`
 }
 
 type AddActivityItemsReq struct {
@@ -31,8 +31,10 @@ type GetActivityItemsReq struct {
 }
 
 type ActivityNavigationInfo struct {
-	NavigationName string `json:"navigationName"`
-	NavigationId   int64  `json:"navigationId"`
+	NavigationName      string `json:"navigationName"`
+	NavigationId        int64  `json:"navigationId"`
+	NavigationWeight    int64  `json:"navigationWeight"`
+	NavigationStartTime int64  `json:"navigationStartTime"`
 }
 
 type ActivityBannerInfo struct {
