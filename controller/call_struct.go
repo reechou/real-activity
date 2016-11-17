@@ -16,8 +16,8 @@ type AddActivityHeaderReq struct {
 }
 
 type AddActivityItemsReq struct {
-	NavigationId int64    `json:"navigationId"`
-	ItemList     []string `json:"itemList"`
+	NavigationId int64              `json:"navigationId"`
+	ItemList     []ActivityItemInfo `json:"itemList"`
 }
 
 type GetActivityHeaderReq struct {
@@ -25,9 +25,10 @@ type GetActivityHeaderReq struct {
 }
 
 type GetActivityItemsReq struct {
-	NavigationId int64 `json:"navigationId"`
-	Offset       int64 `json:"offset"`
-	Num          int64 `json:"num"`
+	NavigationId int64  `json:"navigationId"`
+	TaobaoPid    string `json:"taobaoPid"`
+	Offset       int64  `json:"offset"`
+	Num          int64  `json:"num"`
 }
 
 type ActivityNavigationInfo struct {
@@ -41,6 +42,11 @@ type ActivityBannerInfo struct {
 	BannerImgUrl  string `json:"bannerImgUrl"`
 	BannerLinkUrl string `json:"bannerLinkUrl"`
 	BannerId      int64  `json:"bannerId"`
+}
+
+type ActivityItemInfo struct {
+	Item string `json:"item"`
+	Pid  string `json:"pid"`
 }
 
 type ActivityHeader struct {

@@ -24,8 +24,8 @@ func CreateActivityItemsList(list []ActivityItem) error {
 	return nil
 }
 
-func GetActivityItemCount(navigationId int64) (int64, error) {
-	count, err := x.Where("navigation_id = ?", navigationId).Count(&ActivityItem{})
+func GetActivityItemCount(navigationId int64, taobaoPid string) (int64, error) {
+	count, err := x.Where("navigation_id = ?", navigationId).And("taobao_pid = ?", taobaoPid).Count(&ActivityItem{})
 	if err != nil {
 		logrus.Errorf("navigation_id[%d] get item list count error: %v", navigationId, err)
 		return 0, err
@@ -33,9 +33,9 @@ func GetActivityItemCount(navigationId int64) (int64, error) {
 	return count, nil
 }
 
-func GetActivityItemList(navigationId int64, offset, num int64) ([]ActivityItem, error) {
+func GetActivityItemList(navigationId, offset, num int64, taobaoPid string) ([]ActivityItem, error) {
 	var itemList []ActivityItem
-	err := x.Where("navigation_id = ?", navigationId).Limit(int(num), int(offset)).Find(&itemList)
+	err := x.Where("navigation_id = ?", navigationId).And("taobao_pid = ?", taobaoPid).Limit(int(num), int(offset)).Find(&itemList)
 	if err != nil {
 		logrus.Errorf("navigation_id[%d] get activity item list error: %v", navigationId, err)
 		return nil, err

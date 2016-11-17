@@ -131,7 +131,8 @@ func (al *ActLogic) addActivityItemsHandler(w http.ResponseWriter, r *http.Reque
 	for _, v := range req.ItemList {
 		ai := models.ActivityItem{
 			NavigationId: req.NavigationId,
-			Item:         v,
+			Item:         v.Item,
+			TaobaoPid:    v.Pid,
 			CreatedAt:    now,
 		}
 		itemList = append(itemList, ai)
@@ -241,16 +242,17 @@ func (al *ActLogic) getActivityItemsHandler(w http.ResponseWriter, r *http.Reque
 		logrus.Errorf("getActivityItemsHandler json decode error: %v", err)
 		return
 	}
+	logrus.Debugf("get items req: %v", req)
 
 	rsp := &ActivityResponse{Code: RESPONSE_OK}
 
-	count, err := models.GetActivityItemCount(req.NavigationId)
+	count, err := models.GetActivityItemCount(req.NavigationId, req.TaobaoPid)
 	if err != nil {
 		logrus.Errorf("Error get activity items count error: %v", err)
 		rsp.Code = RESPONSE_ERR
 		rsp.Msg = fmt.Sprintf("Error get activity items count error: %v", err)
 	} else {
-		list, err := models.GetActivityItemList(req.NavigationId, req.Offset, req.Num)
+		list, err := models.GetActivityItemList(req.NavigationId, req.Offset, req.Num, req.TaobaoPid)
 		if err != nil {
 			logrus.Errorf("Error get activity items error: %v", err)
 			rsp.Code = RESPONSE_ERR
