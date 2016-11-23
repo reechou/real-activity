@@ -9,6 +9,7 @@ type ActivityItem struct {
 	NavigationId int64  `xorm:"not null default 0 int index"`
 	TaobaoPid    string `xorm:"not null default '' varchar(128) index"`
 	Item         string `xorm:"not null default '' varchar(2048)"`
+	Weight       int64  `xorm:"not null default 0 int index"`
 	CreatedAt    int64  `xorm:"not null default 0 int"`
 }
 
@@ -35,7 +36,7 @@ func GetActivityItemCount(navigationId int64, taobaoPid string) (int64, error) {
 
 func GetActivityItemList(navigationId, offset, num int64, taobaoPid string) ([]ActivityItem, error) {
 	var itemList []ActivityItem
-	err := x.Where("navigation_id = ?", navigationId).And("taobao_pid = ?", taobaoPid).Limit(int(num), int(offset)).Find(&itemList)
+	err := x.Where("navigation_id = ?", navigationId).And("taobao_pid = ?", taobaoPid).Desc("weight").Limit(int(num), int(offset)).Find(&itemList)
 	if err != nil {
 		logrus.Errorf("navigation_id[%d] get activity item list error: %v", navigationId, err)
 		return nil, err
