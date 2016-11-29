@@ -233,6 +233,11 @@ func (al *ActLogic) getActivityHeaderHandler(w http.ResponseWriter, r *http.Requ
 }
 
 func (al *ActLogic) getActivityItemsHandler(w http.ResponseWriter, r *http.Request) {
+	start := time.Now()
+	defer func() {
+		logrus.Debugf("get activity item list call use_time[%v]", time.Now().Sub(start))
+	}()
+	
 	if r.Method != "POST" {
 		WriteJSON(w, http.StatusOK, nil)
 		return

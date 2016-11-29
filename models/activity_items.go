@@ -1,6 +1,8 @@
 package models
 
 import (
+	"time"
+	
 	"github.com/Sirupsen/logrus"
 )
 
@@ -26,6 +28,11 @@ func CreateActivityItemsList(list []ActivityItem) error {
 }
 
 func GetActivityItemCount(navigationId int64, taobaoPid string) (int64, error) {
+	start := time.Now()
+	defer func() {
+		logrus.Debugf("modles get activity item count use_time[%v]", time.Now().Sub(start))
+	}()
+	
 	count, err := x.Where("navigation_id = ?", navigationId).And("taobao_pid = ?", taobaoPid).Count(&ActivityItem{})
 	if err != nil {
 		logrus.Errorf("navigation_id[%d] get item list count error: %v", navigationId, err)
@@ -35,6 +42,11 @@ func GetActivityItemCount(navigationId int64, taobaoPid string) (int64, error) {
 }
 
 func GetActivityItemList(navigationId, offset, num int64, taobaoPid string) ([]ActivityItem, error) {
+	start := time.Now()
+	defer func() {
+		logrus.Debugf("modles get activity item list use_time[%v]", time.Now().Sub(start))
+	}()
+	
 	var itemList []ActivityItem
 	err := x.Where("navigation_id = ?", navigationId).And("taobao_pid = ?", taobaoPid).Desc("weight").Limit(int(num), int(offset)).Find(&itemList)
 	if err != nil {
